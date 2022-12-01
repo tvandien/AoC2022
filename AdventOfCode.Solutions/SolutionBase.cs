@@ -59,28 +59,15 @@ public abstract class SolutionBase
             throw new Exception("Input is null or empty");
         }
 
-        try
-        {
-            var then = DateTime.Now;
-            var result = SolverFunction();
-            var now = DateTime.Now;
-            return string.IsNullOrEmpty(result)
-                ? SolutionResult.Empty
-                : new SolutionResult { Answer = result, Time = now - then };
-        }
-        catch (Exception)
-        {
-            if (Debugger.IsAttached)
-            {
-                Debugger.Break();
-                return SolutionResult.Empty;
-            }
-            else
-            {
-                throw;
-            }
-        }
+
+        var then = DateTime.Now;
+        var result = SolverFunction();
+        var now = DateTime.Now;
+        return string.IsNullOrEmpty(result)
+            ? SolutionResult.Empty
+            : new SolutionResult { Answer = result, Time = now - then };
     }
+
 
     string LoadInput(bool debug = false)
     {
@@ -89,7 +76,7 @@ public abstract class SolutionBase
 
         if (File.Exists(inputFilepath) && new FileInfo(inputFilepath).Length > 0)
         {
-            return File.ReadAllText(inputFilepath);
+            return File.ReadAllText(inputFilepath).Replace("\r\n", "\n");
         }
 
         if (debug) return "";
